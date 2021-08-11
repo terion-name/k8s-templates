@@ -4,6 +4,7 @@
 Other resources can be added in your kustomization
 
 ```yaml
+# 19 lines without comments
 # base imports
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
