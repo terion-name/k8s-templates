@@ -15,6 +15,13 @@ replacements:
 # now app-specific customizations go
 # set your namespace:
 namespace: my-ns
+# set app and host labels (and own if needed)
+# app label will be used as application name
+# host will be injected to ingress
+# to add more additional hosts use patches
+commonLabels:
+  app: my-awesome-app
+  host: my-awesome-app.com
 # set container image:
 images:
   - name: app-image
@@ -24,24 +31,7 @@ images:
 configMapGenerator:
   - name: app
     envs:
-      - app.env # FOO=bar
-patches:
-  # rename the deployment, all other resources will be renamed and matched after it:
-  - target:
-      kind: Deployment
-      name: app
-    patch: |-
-      - op: replace
-        path: /metadata/name
-        value: my-resource
-  # add target host, tls host will be replaced after it:
-  - target:
-      kind: Ingress
-      name: app
-    patch: |-
-      - op: replace
-        path: /spec/rules/0/host
-        value: my-resource.com
+      - app.env
 # add more stuff if needed
 # initContainers can be also added with patch
 ```
