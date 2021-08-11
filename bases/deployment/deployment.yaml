@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: app-selector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: app-image
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "3000"
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "1024Mi"
+            limits:
+              memory: "1024Mi"
+      imagePullSecrets:
+        - name: regcred
