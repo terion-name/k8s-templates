@@ -1,0 +1,8 @@
+source:
+  kind: Ingress
+  fieldPath: spec.rules.0.host
+targets:
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - spec.tls.0.hosts.0
