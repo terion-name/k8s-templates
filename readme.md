@@ -31,7 +31,7 @@ images:
 configMapGenerator:
   - name: app
     envs:
-      - app.env
+      - app.env # FOO-bar
 # add more stuff if needed
 # initContainers can be also added with patch
 ```
@@ -44,55 +44,65 @@ data:
   FOO: bar
 kind: ConfigMap
 metadata:
+  labels:
+    app: my-awesome-app
+    host: my-awesome-app.com
   name: app-59m54fbgh2
   namespace: my-ns
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-resource
+  labels:
+    app: my-awesome-app
+    host: my-awesome-app.com
+  name: my-awesome-app
   namespace: my-ns
 spec:
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 3000
+    - port: 80
+      protocol: TCP
+      targetPort: 3000
   selector:
-    app: my-resource
+    app: my-awesome-app
+    host: my-awesome-app.com
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: my-resource
-  name: my-resource
+    app: my-awesome-app
+    host: my-awesome-app.com
+  name: my-awesome-app
   namespace: my-ns
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-resource
+      app: my-awesome-app
+      host: my-awesome-app.com
   template:
     metadata:
       labels:
-        app: my-resource
+        app: my-awesome-app
+        host: my-awesome-app.com
     spec:
       containers:
-      - env:
-        - name: PORT
-          value: "3000"
-        image: path/to/my/image:latest
-        imagePullPolicy: Always
-        name: my-resource
-        ports:
-        - containerPort: 3000
-        resources:
-          limits:
-            memory: 1024Mi
-          requests:
-            memory: 1024Mi
+        - env:
+            - name: PORT
+              value: "3000"
+          image: path/to/my/image:latest
+          imagePullPolicy: Always
+          name: my-awesome-app
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: 1024Mi
+            requests:
+              memory: 1024Mi
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -102,20 +112,23 @@ metadata:
     certmanager.k8s.io/cluster-issuer: letsencrypt
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
-  name: my-resource
+  labels:
+    app: my-awesome-app
+    host: my-awesome-app.com
+  name: my-awesome-app
   namespace: my-ns
 spec:
   rules:
-  - host: my-resource.com
-    http:
-      paths:
-      - backend:
-          serviceName: my-resource
-          servicePort: 3000
-        path: /
+    - host: my-awesome-app.com
+      http:
+        paths:
+          - backend:
+              serviceName: my-awesome-app
+              servicePort: 3000
+            path: /
   tls:
-  - hosts:
-    - my-resource.com
-    secretName: host-tls
+    - hosts:
+        - my-awesome-app.com
+      secretName: host-tls
 ```
 </details>
