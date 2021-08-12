@@ -11,15 +11,15 @@ kind: Kustomization
 resources:
   - https://github.com/terion-name/k8s-templates.git/packs/default_https/
 replacements:
-  - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/name-replacement.yml
   - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/host-replacement.yml
 # now app-specific customizations go
 # set your namespace:
-namespace: my-ns
-# set app and host labels (and own if needed)
-# app label will be used as application name
+namespace: my-namespace
+# set prefix, app and host labels (and own if needed)
+# prefix will define all resources names
 # host will be injected to ingress
 # to add more additional hosts use patches
+namePrefix: my-awesome-app-
 commonLabels:
   app: my-awesome-app
   host: my-awesome-app.com
@@ -48,8 +48,8 @@ metadata:
   labels:
     app: my-awesome-app
     host: my-awesome-app.com
-  name: app-59m54fbgh2
-  namespace: my-ns
+  name: my-awesome-app-app-59m54fbgh2
+  namespace: my-namespace
 ---
 apiVersion: v1
 kind: Service
@@ -57,8 +57,8 @@ metadata:
   labels:
     app: my-awesome-app
     host: my-awesome-app.com
-  name: my-awesome-app
-  namespace: my-ns
+  name: my-awesome-app-service
+  namespace: my-namespace
 spec:
   ports:
     - port: 80
@@ -74,8 +74,8 @@ metadata:
   labels:
     app: my-awesome-app
     host: my-awesome-app.com
-  name: my-awesome-app
-  namespace: my-ns
+  name: my-awesome-app-deployment
+  namespace: my-namespace
 spec:
   replicas: 1
   selector:
@@ -91,12 +91,12 @@ spec:
       containers:
         - env:
             - name: PORT
-              value: "3000"
+              value: "5000"
           image: path/to/my/image:latest
           imagePullPolicy: Always
-          name: my-awesome-app
+          name: container
           ports:
-            - containerPort: 3000
+            - containerPort: 5000
           resources:
             limits:
               memory: 1024Mi
@@ -116,20 +116,20 @@ metadata:
   labels:
     app: my-awesome-app
     host: my-awesome-app.com
-  name: my-awesome-app
-  namespace: my-ns
+  name: my-awesome-app-ingress
+  namespace: my-namespace
 spec:
   rules:
     - host: my-awesome-app.com
       http:
         paths:
           - backend:
-              serviceName: my-awesome-app
-              servicePort: 3000
+              serviceName: my-awesome-app-service
+              servicePort: 5000
             path: /
   tls:
     - hosts:
         - my-awesome-app.com
-      secretName: host-tls
+      secretName: my-awesome-app.com
 ```
 </details>

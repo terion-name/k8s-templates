@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app
+      app: deployment
   template:
     spec:
       containers:
-        - name: app
+        - name: main-container
           image: app-image
           imagePullPolicy: Always
           env:
             - name: PORT
-              value: "3000"
+              value: "5000"
           ports:
-            - containerPort: 3000
+            - containerPort: 5000
           resources:
             requests:
               memory: "1024Mi"

@@ -6,7 +6,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
     certmanager.k8s.io/cluster-issuer: letsencrypt
     kubernetes.io/tls-acme: 'true'
-  name: app
+  name: ingress
 spec:
   tls:
     - hosts:
@@ -18,5 +18,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: app
+              serviceName: service
               servicePort: 3000
