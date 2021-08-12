@@ -13,11 +13,15 @@ spec:
         - name: main-container
           image: app-image
           imagePullPolicy: Always
-          env:
-            - name: PORT
-              value: "5000"
+          envFrom:
+            - configMapRef:
+                name: config
           ports:
-            - containerPort: 5000
+            - containerPort:
+                valueFrom:
+                  configMapKeyRef:
+                    name: config
+                    key: PORT
           resources:
             requests:
               memory: "1024Mi"
@@ -25,3 +29,10 @@ spec:
               memory: "1024Mi"
       imagePullSecrets:
         - name: regcred
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  PORT: 5000

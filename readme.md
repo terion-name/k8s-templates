@@ -1,10 +1,12 @@
-# Examples
+#WIP!
 
-## Minimal app with deployment, service and https-ingress
+## Examples
+
+### Minimal app with deployment, service and https-ingress
 Other resources can be added in your kustomization
 
 ```yaml
-# 19 lines without comments
+# 20 lines without comments
 # base imports
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -30,9 +32,10 @@ images:
     newName: path/to/my/image
 # add env (or secrets with secretGenerator) if required:
 configMapGenerator:
-  - name: app
+  - name: my-awesome-app-config # must be namePrefix + "config"
+    behavior: merge # or replace. default config contains only PORT=5000
     envs:
-      - app.env # FOO-bar
+      - app.env # FOO=bar, or inline values
 # add more stuff if needed
 # initContainers can be also added with patch
 ```
@@ -43,12 +46,13 @@ configMapGenerator:
 apiVersion: v1
 data:
   FOO: bar
+  PORT: "5000"
 kind: ConfigMap
 metadata:
   labels:
     app: my-awesome-app
     host: my-awesome-app.com
-  name: my-awesome-app-app-59m54fbgh2
+  name: my-awesome-app-config
   namespace: my-namespace
 ---
 apiVersion: v1
@@ -63,7 +67,11 @@ spec:
   ports:
     - port: 80
       protocol: TCP
-      targetPort: 3000
+      targetPort:
+        valueFrom:
+          configMapKeyRef:
+            key: PORT
+            name: config
   selector:
     app: my-awesome-app
     host: my-awesome-app.com
@@ -89,14 +97,18 @@ spec:
         host: my-awesome-app.com
     spec:
       containers:
-        - env:
-            - name: PORT
-              value: "5000"
+        - envFrom:
+            - configMapRef:
+                name: my-awesome-app-config
           image: path/to/my/image:latest
           imagePullPolicy: Always
-          name: container
+          name: main-container
           ports:
-            - containerPort: 5000
+            - containerPort:
+                valueFrom:
+                  configMapKeyRef:
+                    key: PORT
+                    name: config
           resources:
             limits:
               memory: 1024Mi
@@ -125,7 +137,7 @@ spec:
         paths:
           - backend:
               serviceName: my-awesome-app-service
-              servicePort: 5000
+              servicePort: 80
             path: /
   tls:
     - hosts:
