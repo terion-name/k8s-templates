@@ -28,7 +28,7 @@ commonLabels:
 # set container image:
 images:
   - name: app-image
-    newTag: latest
+    newTag: 1.0.0 # defaults to latest
     newName: path/to/my/image
 # add env (or secrets with secretGenerator) if required:
 configMapGenerator:
@@ -100,7 +100,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: my-awesome-app-config
-          image: path/to/my/image:latest
+          image: path/to/my/image:1.0.0
           imagePullPolicy: Always
           name: main-container
           ports:
