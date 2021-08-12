@@ -7,4 +7,4 @@ targets:
     fieldPaths:
       - spec.rules.0.host
       - spec.tls.0.hosts.0
-      - spec.tls.secretName
+      - spec.tls.0.secretName
