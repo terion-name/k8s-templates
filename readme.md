@@ -145,3 +145,8 @@ spec:
       secretName: my-awesome-app.com
 ```
 </details>
+
+Create from github with template using [mo](https://github.com/tests-always-included/mo) (or any other mustache renderer):
+```bash
+curl -s https://raw.githubusercontent.com/terion-name/k8s-templates/master/templates/default_https.yml |  namespace=production appname=landing image=https://registry/landing tag=1.0.0 host=landing.example.com env=.env mo > kustomization.yml && kustomize build
+```
