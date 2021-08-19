@@ -6,11 +6,7 @@ metadata:
 spec:
   ports:
     - port: 80
-      targetPort:
-        valueFrom:
-          configMapKeyRef:
-            name: config
-            key: PORT
+      targetPort: 5000
       protocol: TCP
   selector:
     app: service

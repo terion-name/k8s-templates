@@ -1,0 +1,13 @@
+source:
+  kind: ConfigMap
+  name: config
+  fieldPath: data.PORT
+targets:
+  - select:
+      kind: Service
+    fieldPaths:
+      - spec.ports.0.targetPort
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - spec.template.spec.containers.0.ports.0.containerPort

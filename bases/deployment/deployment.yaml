@@ -17,11 +17,7 @@ spec:
             - configMapRef:
                 name: config
           ports:
-            - containerPort:
-                valueFrom:
-                  configMapKeyRef:
-                    name: config
-                    key: PORT
+            - containerPort: 5000
           resources:
             requests:
               memory: "1024Mi"

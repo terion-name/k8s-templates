@@ -4,6 +4,7 @@ resources:
   - https://github.com/terion-name/k8s-templates.git/packs/default_https/
 replacements:
   - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/host-replacement.yml
+  - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/port-replacement.yml
 namespace: {{namespace}}
 namePrefix: {{appname}}-
 commonLabels:
