@@ -31,4 +31,4 @@ kind: ConfigMap
 metadata:
   name: config
 data:
-  PORT: 5000
+  PORT: "5000"
