@@ -7,12 +7,14 @@ replacements:
   - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/port-replacement.yml
 namespace: {{namespace}}
 namePrefix: {{appname}}-
+commonAnnotations:
+  appPort: {{port}}{{^port}}5000{{/port}}
 commonLabels:
   app: {{appname}}
   host: {{host}}
 images:
   - name: app-image
-    newTag: {{tag}}
+    newTag: {{tag}}{{^tag}}latest{{/tag}}
     newName: {{image}}
 {{#env}}
 configMapGenerator:

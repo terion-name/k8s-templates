@@ -1,7 +1,6 @@
 source:
-  kind: ConfigMap
-  name: config
-  fieldPath: data.PORT
+  kind: Ingress
+  fieldPath: metadata.annotations.appPort
 targets:
   - select:
       kind: Service
