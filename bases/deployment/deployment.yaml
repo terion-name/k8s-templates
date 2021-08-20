@@ -18,6 +18,7 @@ spec:
                 name: config
           ports:
             - containerPort: 5000
+              name: appPort
           resources:
             requests:
               memory: "1024Mi"

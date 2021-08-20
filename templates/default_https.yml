@@ -4,11 +4,8 @@ resources:
   - https://github.com/terion-name/k8s-templates.git/packs/default_https/
 replacements:
   - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/host-replacement.yml
-  - path: https://raw.githubusercontent.com/terion-name/k8s-templates/master/helpers/port-replacement.yml
 namespace: {{namespace}}
 namePrefix: {{appname}}-
-commonAnnotations:
-  appPort: {{port}}{{^port}}5000{{/port}}
 commonLabels:
   app: {{appname}}
   host: {{host}}
@@ -16,6 +13,15 @@ images:
   - name: app-image
     newTag: {{tag}}{{^tag}}latest{{/tag}}
     newName: {{image}}
+{{#port}}
+patches:
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/ports/0/containerPort
+        value: {{port}}
+{{/port}}
 {{#env}}
 configMapGenerator:
   - name: config
