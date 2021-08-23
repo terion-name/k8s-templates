@@ -12,7 +12,6 @@ spec:
       containers:
         - name: main-container
           image: app-image:latest
-          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: config
