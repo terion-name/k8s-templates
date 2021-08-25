@@ -1,6 +1,8 @@
 source:
   kind: Ingress
-  fieldPath: metadata.labels.host
+  fieldPath: metadata~labels~app.kubernetes.io/host
+  options:
+    delimiter: '~'
 targets:
   - select:
       kind: Ingress
