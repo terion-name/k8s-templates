@@ -1,6 +1,6 @@
 source:
   kind: Ingress
-  fieldPath: metadata.labels.app\.kubernetes\.io/host
+  fieldPath: metadata.labels.[app.kubernetes.io/host]
 targets:
   - select:
       kind: Ingress
