@@ -1,8 +1,0 @@
-source:
-  kind: Ingress
-  fieldPath: metadata.annotations.appPort
-targets:
-  - select:
-      kind: Deployment
-    fieldPaths:
-      - spec.template.spec.containers.0.ports.[name=appPort].containerPort
