@@ -9,4 +9,4 @@ spec:
       targetPort: app-port
       protocol: TCP
   selector:
-    app: service
+    kind: service

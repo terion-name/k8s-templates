@@ -6,7 +6,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deployment
+      kind: deployment
   template:
     spec:
       containers:
