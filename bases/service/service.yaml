@@ -8,3 +8,5 @@ spec:
     - port: 80
       targetPort: app-port
       protocol: TCP
+  selector:
+    app: service
